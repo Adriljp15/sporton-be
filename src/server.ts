@@ -1,17 +1,21 @@
 import mongoose from "mongoose";
-import dotenv, { config } from "dotenv";
-import app from "./app.js";
+import dotenv from "dotenv";
+import app from "./app";
 
 dotenv.config();
 
-const POERT = process.env.PORT || 5001;
-const MONGO_URL = process.env.MONGO_URL || "no-mongo-url";
+const PORT = process.env.PORT || "5001";
+const MONGO_URI = process.env.MONGO_URI || "no-mongo-url";
 
-mongoose.connect(MONGO_URL).then(() => {
+
+mongoose.connect(MONGO_URI, {
+    family: 4,
+    authSource: "admin",
+    retryWrites: true,
+}).then(() => {
     console.log("Connected to MongoDB");
-    app.listen(POERT, () => {
-        console.log(`Server is running on port ${POERT}`);
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
     });
-}).catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
-});
+}).catch((error) => 
+    console.error("Error connecting to MongoDB:", error));
